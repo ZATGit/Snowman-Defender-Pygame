@@ -19,9 +19,20 @@ class Game(object):
         """Constructs block lists, blocks, and game conditions."""
         self.score = 0
         self.game_over = False
+
+        #Timer Count
+        self.frame_count = 0
+        self.frame_rate = 60
+        self.start_time = 90
+
+        #Block Lists
         self.good_block_list = pygame.sprite.Group()
         self.bad_block_list = pygame.sprite.Group()
         self.all_sprites_list = pygame.sprite.Group()
+
+        #Player Block
+        self.player = Player(100, 100)
+        self.all_sprites_list.add(self.player)
 
         #Good Block List Creation
         for i in range(35):
@@ -42,16 +53,13 @@ class Game(object):
             self.bad_block_list.add(block)
             self.all_sprites_list.add(block)
 
-        self.player = Player(100, 100)
-        self.all_sprites_list.add(self.player)
 
     def display_screen(self,screen):
-        screen.fill(WHITE)
-        background_position = [0, 0]
+        """Draws sprites and text to screen."""
+        screen.fill(WHITE) #Remove
         background_image = pygame.image.load("snowy_village.png").convert()
 
         screen.blit(background_image, [0, 0])
-
 
         if self.game_over:
             screen.fill(BLACK)
@@ -64,7 +72,25 @@ class Game(object):
         if not self.game_over:
             self.all_sprites_list.draw(screen)
 
-        pygame.display.flip()
+            #Score Display
+            font = pygame.font.SysFont('Courier', 25)
+            scoretext = font.render("Score:" + str(self.score), True, BLACK)
+            screen.blit(scoretext, [10, 10])
+
+            # Countdown Timer
+            seconds_total = self.start_time - (self.frame_count // self.frame_rate)
+            if seconds_total < 0:
+                seconds_total = 0
+            # Modulus Remainder Calcs Seconds
+            minutes = seconds_total // 60
+            seconds = seconds_total % 60
+
+            displayed_string = "Time left: {0:02}:{1:02}".format(minutes, seconds)
+            text = font.render(displayed_string, True, BLACK)
+            screen.blit(text, [450, 10])
+
+            frame_count += 1
+            pygame.display.flip()
 
 
     def game_events(self):
@@ -210,33 +236,7 @@ def main():
         game.display_screen(screen)
 
 
-        #frame_count = 0
-        #frame_rate = 60
-        #start_time = 90
-
-
-        #Main Game Loop
-
-        #Score
-        """font = pygame.font.SysFont('Courier', 25)
-        scoretext = font.render("Score:" + str(score), True, BLACK)
-        screen.blit(scoretext, [10, 10])
-
-        # Countdown Timer
-        seconds_total = start_time - (frame_count // frame_rate)
-        if seconds_total < 0:
-            seconds_total = 0
-        # Modulus Remainder Calcs Seconds
-        minutes = seconds_total // 60
-        seconds = seconds_total % 60
-
-        displayed_string = "Time left: {0:02}:{1:02}".format(minutes, seconds)
-        text = font.render(displayed_string, True, BLACK)
-        screen.blit(text, [450, 10])"""
-
-        #frame_count += 1
-
-        #pygame.display.flip()
+        pygame.display.flip()
 
         clock.tick(60)
 
