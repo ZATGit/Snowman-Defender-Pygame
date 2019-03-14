@@ -23,7 +23,6 @@ class Game(object):
         self.bad_block_list = pygame.sprite.Group()
         self.all_sprites_list = pygame.sprite.Group()
 
-
         #Good Block List Creation
         for i in range(35):
             # Block Image
@@ -43,15 +42,16 @@ class Game(object):
             self.bad_block_list.add(block)
             self.all_sprites_list.add(block)
 
-        self.player = Player()
+        self.player = Player(100, 100)
         self.all_sprites_list.add(self.player)
 
     def display_screen(self,screen):
-
-        # background_position = [0, 0]
+        screen.fill(WHITE)
+        background_position = [0, 0]
         background_image = pygame.image.load("snowy_village.png").convert()
 
         screen.blit(background_image, [0, 0])
+
 
         if self.game_over:
             screen.fill(BLACK)
@@ -80,24 +80,24 @@ class Game(object):
             elif event.type == pygame.KEYDOWN:
                 #which key and adjust speed
                 if event.key == pygame.K_a:
-                    player.changespeed(-3,0)
+                    self.player.changespeed(-3,0)
                 elif event.key == pygame.K_d:
-                    player.changespeed(3,0)
+                    self.player.changespeed(3,0)
                 elif event.key == pygame.K_w:
-                    player.changespeed(0,-3)
+                    self.player.changespeed(0,-3)
                 elif event.key == pygame.K_s:
-                    player.changespeed(0,3)
+                    self.player.changespeed(0,3)
 
             #User Stops Pressing Key
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_a:
-                    player.changespeed(3,0)
+                    self.player.changespeed(3,0)
                 elif event.key == pygame.K_d:
-                    player.changespeed(-3,0)
+                    self.player.changespeed(-3,0)
                 elif event.key == pygame.K_w:
-                    player.changespeed(0,3)
+                    self.player.changespeed(0,3)
                 elif event.key == pygame.K_s:
-                    player.changespeed(0,-3)
+                    self.player.changespeed(0,-3)
 
         return False
 
@@ -127,7 +127,7 @@ class Game(object):
                 print(self.score)
 
             #Game Over Condition
-            if len(self.good_block_list) == 35:
+            if len(good_blocks_hit_list) == 35:
                 self.game_over = True
 
 
@@ -140,9 +140,6 @@ class Block(pygame.sprite.Sprite):
         self.image.set_colorkey(WHITE)
         #Position Update, Setting rect.x and rect.y
         self.rect = self.image.get_rect()
-        #Block Collision Sounds
-        self.good_block_sound = pygame.mixer.Sound("good_block.wav")
-        self.bad_block_sound = pygame.mixer.Sound("bad_block.wav")
 
 class Player(pygame.sprite.Sprite):
     """ Create's player controlled block."""
@@ -239,7 +236,7 @@ def main():
 
         #frame_count += 1
 
-        pygame.display.flip()
+        #pygame.display.flip()
 
         clock.tick(60)
 
