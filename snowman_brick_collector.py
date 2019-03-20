@@ -4,13 +4,9 @@ import random
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 BLUE = (0, 0, 255)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
 
-#Screen Dimensions
-#Fix Constants Pep-8; Caps
-screen_width = 700
-screen_height = 400
+SCREEN_WIDTH = 700
+SCREEN_HEIGHT = 400
 
 class Game(object):
     """Contains the game logic, events, and display."""
@@ -19,11 +15,6 @@ class Game(object):
         """Constructs block lists, blocks, and game conditions."""
         self.score = 0
         self.game_over = False
-
-        #Timer Count
-        self.frame_count = 0
-        self.frame_rate = 60
-        self.start_time = 90
 
         #Block Lists
         self.good_block_list = pygame.sprite.Group()
@@ -39,8 +30,8 @@ class Game(object):
             # Block Image
             block = Block("snowman_sprite.png")
             # Block Locations
-            block.rect.x = random.randrange(screen_width)
-            block.rect.y = random.randrange(screen_height)
+            block.rect.x = random.randrange(SCREEN_WIDTH)
+            block.rect.y = random.randrange(SCREEN_HEIGHT)
             # Add Blocks to Lists
             self.good_block_list.add(block)
             self.all_sprites_list.add(block)
@@ -48,8 +39,8 @@ class Game(object):
         #Bad Block List Creation
         for i in range(25):
             block = Block("robot_sprite.png")
-            block.rect.x = random.randrange(screen_width)
-            block.rect.y = random.randrange(screen_height)
+            block.rect.x = random.randrange(SCREEN_WIDTH)
+            block.rect.y = random.randrange(SCREEN_HEIGHT)
             self.bad_block_list.add(block)
             self.all_sprites_list.add(block)
 
@@ -61,35 +52,23 @@ class Game(object):
 
         screen.blit(background_image, [0, 0])
 
+        # Score Display
+        font = pygame.font.SysFont('Courier', 25)
+        scoretext = font.render("Score:" + str(self.score), True, BLACK)
+
         if self.game_over:
             screen.fill(BLACK)
             font = pygame.font.SysFont("Courier",30)
             text = font.render("Game Over. \nHit Space to Play Again", True, WHITE)
-            center_text_x = (screen_width // 2) - (text.get_width() // 2)
-            center_text_y = (screen_height // 2) - (text.get_height() // 2)
+            center_text_x = (SCREEN_WIDTH // 2) - (text.get_width() // 2)
+            center_text_y = (SCREEN_HEIGHT // 2) - (text.get_height() // 2)
             screen.blit(text, [center_text_x, center_text_y])
 
         if not self.game_over:
             self.all_sprites_list.draw(screen)
 
-            #Score Display
-            font = pygame.font.SysFont('Courier', 25)
-            scoretext = font.render("Score:" + str(self.score), True, BLACK)
             screen.blit(scoretext, [10, 10])
 
-            # Countdown Timer
-            seconds_total = self.start_time - (self.frame_count // self.frame_rate)
-            if seconds_total < 0:
-                seconds_total = 0
-            # Modulus Remainder Calcs Seconds
-            minutes = seconds_total // 60
-            seconds = seconds_total % 60
-
-            displayed_string = "Time left: {0:02}:{1:02}".format(minutes, seconds)
-            text = font.render(displayed_string, True, BLACK)
-            screen.blit(text, [450, 10])
-
-            frame_count += 1
             pygame.display.flip()
 
 
@@ -141,13 +120,13 @@ class Game(object):
             bad_blocks_hit_list = pygame.sprite.spritecollide(self.player, self.bad_block_list, True)
 
             #Good Collisions
-            for block in good_blocks_hit_list:
+            for self.block in good_blocks_hit_list:
                 self.score += 1
                 good_block_sound.play()
                 print(self.score)
 
             #Bad Collisions
-            for block in bad_blocks_hit_list:
+            for self.block in bad_blocks_hit_list:
                 self.score -= 1
                 bad_block_sound.play()
                 print(self.score)
@@ -155,7 +134,6 @@ class Game(object):
             #Game Over Condition
             if len(good_blocks_hit_list) == 35:
                 self.game_over = True
-
 
 class Block(pygame.sprite.Sprite):
    """Creates the attributes for all blocks."""
@@ -211,12 +189,11 @@ class Player(pygame.sprite.Sprite):
         if self.rect.y > (400 - 15):
             self.rect.y = (400 - 15)
 
-
 def main():
 
     pygame.init()
 
-    screen = pygame.display.set_mode([screen_width, screen_height])
+    screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
     pygame.display.set_caption("Save Snowy Village!")
 
     done = False
@@ -229,12 +206,11 @@ def main():
 
         done = game.game_events()
 
-
         game.game_logic()
 
+        """game.game_timer(screen)"""
 
         game.display_screen(screen)
-
 
         pygame.display.flip()
 
