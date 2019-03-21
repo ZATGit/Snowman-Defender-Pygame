@@ -15,13 +15,15 @@ class Game(object):
         """Constructs block lists, blocks, and game conditions."""
         self.score = 0
         self.game_over = False
+        self.game_over_hit_count = 0
 
         # Timer Count
         self.frame_count = 0
         self.frame_rate = 60
-        self.start_time = 90
+        self.start_time = 60
         self.minutes = 0
         self.seconds = 0
+        self.seconds_total = 1
 
         #Block Lists
         self.good_block_list = pygame.sprite.Group()
@@ -33,28 +35,27 @@ class Game(object):
         self.all_sprites_list.add(self.player)
 
         #Good Block List Creation
-        for i in range(35):
+        for i in range(30):
             # Block Image
             block = Block("snowman_sprite.png")
             # Block Locations
-            block.rect.x = random.randrange(SCREEN_WIDTH)
-            block.rect.y = random.randrange(SCREEN_HEIGHT)
+            block.rect.x = random.randrange(10,650)
+            block.rect.y = random.randrange(50,360)
             # Add Blocks to Lists
             self.good_block_list.add(block)
             self.all_sprites_list.add(block)
 
         #Bad Block List Creation
-        for i in range(25):
+        for i in range(20):
             block = Block("robot_sprite.png")
-            block.rect.x = random.randrange(SCREEN_WIDTH)
-            block.rect.y = random.randrange(SCREEN_HEIGHT)
+            block.rect.x = random.randrange(10,650)
+            block.rect.y = random.randrange(50,360)
             self.bad_block_list.add(block)
             self.all_sprites_list.add(block)
 
-
     def display_screen(self,screen):
         """Draws sprites and text to screen."""
-        screen.fill(WHITE) #Remove
+        screen.fill(WHITE)
         background_image = pygame.image.load("snowy_village.png").convert()
 
         screen.blit(background_image, [0, 0])
@@ -67,11 +68,10 @@ class Game(object):
         displayed_string = "Time left: {0:02}:{1:02}".format(self.minutes, self.seconds)
         timer_string = font.render(displayed_string, True, BLACK)
 
-        #Timer Display
         if self.game_over:
             screen.fill(BLACK)
             font = pygame.font.SysFont("Courier",30)
-            game_over_text = font.render("Game Over. \nHit Space to Play Again", True, WHITE)
+            game_over_text = font.render("Game Over. Click to Play Again", True, WHITE)
             center_text_x = (SCREEN_WIDTH // 2) - (game_over_text.get_width() // 2)
             center_text_y = (SCREEN_HEIGHT // 2) - (game_over_text.get_height() // 2)
 
@@ -86,13 +86,12 @@ class Game(object):
 
             pygame.display.flip()
 
-
     def game_events(self):
         """Contains Game Processes & Events (Controls)."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return True
-            if event.type == pygame.K_SPACE:
+            if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.game_over:
                     self.__init__()
 
@@ -137,6 +136,7 @@ class Game(object):
             #Good Collisions
             for self.block in good_blocks_hit_list:
                 self.score += 1
+                self.game_over_hit_count += 1
                 good_block_sound.play()
                 print(self.score)
 
@@ -147,20 +147,18 @@ class Game(object):
                 print(self.score)
 
             #Game Over Condition
-            if len(good_blocks_hit_list) == 35:
+            if self.score == 20 or self.score == -5 or self.seconds_total == 0 or self.game_over_hit_count == 30:
                 self.game_over = True
 
             #Countdown Timer
-            seconds_total = self.start_time - (self.frame_count // self.frame_rate)
-            if seconds_total < 0:
-                seconds_total = 0
+            self.seconds_total = self.start_time - (self.frame_count // self.frame_rate)
+            if self.seconds_total < 0:
+                self.seconds_total = 0
             # Modulus Remainder Calcs Seconds
-            self.minutes = seconds_total // 60
-            self.seconds = seconds_total % 60
+            self.minutes = self.seconds_total // 60
+            self.seconds = self.seconds_total % 60
 
             self.frame_count += 1
-
-
 
 class Block(pygame.sprite.Sprite):
    """Creates the attributes for all blocks."""
@@ -187,7 +185,6 @@ class Player(pygame.sprite.Sprite):
         #Starting Speed
         self.change_x = 0
         self.change_y = 0
-
 
     def changespeed(self, x, y):
         """ Changes Player Speed."""
@@ -234,8 +231,6 @@ def main():
         done = game.game_events()
 
         game.game_logic()
-
-        """game.game_timer(screen)"""
 
         game.display_screen(screen)
 
