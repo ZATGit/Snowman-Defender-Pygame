@@ -34,6 +34,9 @@ class Game(object):
         self.player = Player(100, 100)
         self.all_sprites_list.add(self.player)
 
+        self.snowflake_list = []
+        self.snowflake_item = [1]
+
         #Good Block List Creation
         for i in range(30):
             # Block Image
@@ -52,6 +55,14 @@ class Game(object):
             block.rect.y = random.randrange(50,360)
             self.bad_block_list.add(block)
             self.all_sprites_list.add(block)
+
+        #Snowflake List Creation (Non-Sprite)
+        for i in range(50):
+            snow_x = random.randrange(0,700)
+            snow_y = random.randrange(0,400)
+            self.snowflake_list.append([snow_x,snow_y])
+
+
 
     def display_screen(self,screen):
         """Draws sprites and text to screen."""
@@ -83,6 +94,8 @@ class Game(object):
             screen.blit(score_text, [10, 10])
 
             screen.blit(timer_string, [450, 10])
+
+            pygame.draw.circle(screen, WHITE, self.snowflake_item, 2)
 
             pygame.display.flip()
 
@@ -159,6 +172,15 @@ class Game(object):
             self.seconds = self.seconds_total % 60
 
             self.frame_count += 1
+
+            #Snowflake Drawing
+            for self.snowflake_item in self.snowflake_list:
+                self.snowflake_item[1] += 1
+
+                #Snowflake Reappears above screen
+                if self.snowflake_item[1] > 400:
+                    self.snowflake_item[1] = random.randrange(-20,-5)
+                    self.snowflake_item[0] = random.randrange(700)
 
 class Block(pygame.sprite.Sprite):
    """Creates the attributes for all blocks."""
