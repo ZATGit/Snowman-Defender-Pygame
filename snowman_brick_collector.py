@@ -16,6 +16,13 @@ class Game(object):
         self.score = 0
         self.game_over = False
 
+        # Timer Count
+        self.frame_count = 0
+        self.frame_rate = 60
+        self.start_time = 90
+        self.minutes = 0
+        self.seconds = 0
+
         #Block Lists
         self.good_block_list = pygame.sprite.Group()
         self.bad_block_list = pygame.sprite.Group()
@@ -52,22 +59,30 @@ class Game(object):
 
         screen.blit(background_image, [0, 0])
 
-        # Score Display
+        #Score Display
         font = pygame.font.SysFont('Courier', 25)
-        scoretext = font.render("Score:" + str(self.score), True, BLACK)
+        score_text = font.render("Score:" + str(self.score), True, BLACK)
 
+        #Timer Display
+        displayed_string = "Time left: {0:02}:{1:02}".format(self.minutes, self.seconds)
+        timer_string = font.render(displayed_string, True, BLACK)
+
+        #Timer Display
         if self.game_over:
             screen.fill(BLACK)
             font = pygame.font.SysFont("Courier",30)
-            text = font.render("Game Over. \nHit Space to Play Again", True, WHITE)
-            center_text_x = (SCREEN_WIDTH // 2) - (text.get_width() // 2)
-            center_text_y = (SCREEN_HEIGHT // 2) - (text.get_height() // 2)
-            screen.blit(text, [center_text_x, center_text_y])
+            game_over_text = font.render("Game Over. \nHit Space to Play Again", True, WHITE)
+            center_text_x = (SCREEN_WIDTH // 2) - (game_over_text.get_width() // 2)
+            center_text_y = (SCREEN_HEIGHT // 2) - (game_over_text.get_height() // 2)
+
+            screen.blit(game_over_text, [center_text_x, center_text_y])
 
         if not self.game_over:
             self.all_sprites_list.draw(screen)
 
-            screen.blit(scoretext, [10, 10])
+            screen.blit(score_text, [10, 10])
+
+            screen.blit(timer_string, [450, 10])
 
             pygame.display.flip()
 
@@ -134,6 +149,18 @@ class Game(object):
             #Game Over Condition
             if len(good_blocks_hit_list) == 35:
                 self.game_over = True
+
+            #Countdown Timer
+            seconds_total = self.start_time - (self.frame_count // self.frame_rate)
+            if seconds_total < 0:
+                seconds_total = 0
+            # Modulus Remainder Calcs Seconds
+            self.minutes = seconds_total // 60
+            self.seconds = seconds_total % 60
+
+            self.frame_count += 1
+
+
 
 class Block(pygame.sprite.Sprite):
    """Creates the attributes for all blocks."""
