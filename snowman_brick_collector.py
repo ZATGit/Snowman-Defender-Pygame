@@ -30,12 +30,11 @@ class Game(object):
         self.bad_block_list = pygame.sprite.Group()
         self.all_sprites_list = pygame.sprite.Group()
 
+        self.snowflake_list = []
+
         #Player Block
         self.player = Player(100, 100)
         self.all_sprites_list.add(self.player)
-
-        self.snowflake_list = []
-        self.snowflake_item = [1]
 
         #Good Block List Creation
         for i in range(30):
@@ -62,8 +61,6 @@ class Game(object):
             snow_y = random.randrange(0,400)
             self.snowflake_list.append([snow_x,snow_y])
 
-
-
     def display_screen(self,screen):
         """Draws sprites and text to screen."""
         screen.fill(WHITE)
@@ -74,6 +71,17 @@ class Game(object):
         #Score Display
         font = pygame.font.SysFont('Courier', 25)
         score_text = font.render("Score:" + str(self.score), True, BLACK)
+
+        # Snowflake Drawing
+        for snowflake_item in self.snowflake_list:
+            snowflake_item[1] += 1
+
+            pygame.draw.circle(screen, WHITE, snowflake_item, 2)
+
+            # Snowflake Reappears above screen
+            if snowflake_item[1] > 400:
+                snowflake_item[1] = random.randrange(-20, -5)
+                snowflake_item[0] = random.randrange(700)
 
         #Timer Display
         displayed_string = "Time left: {0:02}:{1:02}".format(self.minutes, self.seconds)
@@ -94,8 +102,6 @@ class Game(object):
             screen.blit(score_text, [10, 10])
 
             screen.blit(timer_string, [450, 10])
-
-            pygame.draw.circle(screen, WHITE, self.snowflake_item, 2)
 
             pygame.display.flip()
 
@@ -173,14 +179,6 @@ class Game(object):
 
             self.frame_count += 1
 
-            #Snowflake Drawing
-            for self.snowflake_item in self.snowflake_list:
-                self.snowflake_item[1] += 1
-
-                #Snowflake Reappears above screen
-                if self.snowflake_item[1] > 400:
-                    self.snowflake_item[1] = random.randrange(-20,-5)
-                    self.snowflake_item[0] = random.randrange(700)
 
 class Block(pygame.sprite.Sprite):
    """Creates the attributes for all blocks."""
