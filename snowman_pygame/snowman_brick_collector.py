@@ -181,7 +181,7 @@ class Game(object):
 
 
 class Block(pygame.sprite.Sprite):
-   """Creates the attributes for all blocks."""
+    """Creates the attributes for all blocks."""
 
     def __init__(self, filename):
         super().__init__()

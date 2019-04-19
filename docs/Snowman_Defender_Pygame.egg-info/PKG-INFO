@@ -1,0 +1,11 @@
+Metadata-Version: 1.1
+Name: Snowman-Defender-Pygame
+Version: 1.2
+Summary: A bitmapped game wherein a player attempts to collect all the snowmen sprites and avoid robot sprites.
+Home-page: github.com/ZATGit
+Author: Zach Trembly
+Author-email: mail@zachtrembly.com
+License: MIT
+Download-URL: https://github.com/ZATGit/Snowman-Defender-Pygame
+Description: UNKNOWN
+Platform: UNKNOWN
