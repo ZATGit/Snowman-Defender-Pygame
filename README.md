@@ -1,6 +1,21 @@
 # Snowman Defender
 Save the snowpeople from the robot hoards by collecting each one without touching the robots. Use your WASD keys to collect the snowpeople, but watch out for the robots! This game is timed and tracks your score. Good luck!
 
+## Demo
+![Demo](snowman_pygame/snowman_game_demo.gif)
+
+## Features
+* Accumulate points by collecting randomly generated snowman sprites.
+* Avoid randomly generated robot sprites that reduce the displayed score. 
+* A "Game Over: Click to Play Again" screen that is triggered by 4 conditions.
+* A countdown timer set to 60 seconds.
+* Win condition: A score of 20 before the timer runs out.
+* Lose Conditions: A score of -5 or 30 sprite collisions before reaching 20 points or the timer reaches 0.
+
+## Built Using
+* Python for the game engine
+* Pygame for graphics rendering
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development, testing, or entertainment purposes. See deployment for notes on how to deploy the project on a live system.
