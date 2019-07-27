@@ -5,12 +5,25 @@ Save the snowpeople from the robot hoards by collecting each one without touchin
 ![Demo](snowman_pygame/snowman_game_demo.gif)
 
 ## Features
+### Game Logic
 * Accumulate points by collecting randomly generated snowman sprites.
 * Avoid randomly generated robot sprites that reduce the displayed score. 
-* A "Game Over: Click to Play Again" screen that is triggered by 4 conditions.
+* The player cannot move off screen.
+* A ``"Game Over: Click to Play Again"`` screen that is triggered by 1 of 3 conditions.
 * A countdown timer set to 60 seconds.
 * Win condition: A score of 20 before the timer runs out.
-* Lose Conditions: A score of -5 or 30 sprite collisions before reaching 20 points or the timer reaches 0.
+* Lose Conditions: A score of -5 ``or`` 30 sprite collisions (before reaching 20 points) ``or`` the timer reaches 0.
+### Visual
+* Snowman & Robot images for each collection of sprites.
+* Randomly generated falling objects that simulate snowfall. 
+* A festive winter backdrop.
+### Audio
+* An audio warning plays upon collision with the edge of the screen.
+* Distinct arcade-style audio clips play when the player collides with a snowman or robot sprite.
+### Menus
+* Clicking the Game Over screen resets the game.
+* Clicking the "close" button exits the application.
+
 
 ## Built Using
 * Python for the game engine
